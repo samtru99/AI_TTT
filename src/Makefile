@@ -1,15 +1,26 @@
-CXX = g++
+# Compiler
+CC = g++
 
-CFLAGS = -std=c++17 -g
+# Compiler flags
+CFLAGS = -Wall -Wextra -std=c++11
 
-main: main.o Generate_Q_Table.o
-	$(CXX) $(CFLAGS) -o main main.o Generate_Q_Table.o
+# Source files
+SRCS = main.cpp Generate_Q_Table.cpp Check_board.cpp
 
-main.o: main.cpp
-	$(CXX) $(CFLAGS) -c main.cpp
+# Object files
+OBJS = $(SRCS:.cpp=.o)
 
-Generate_Q_Table.o: Generate_Q_Table.cpp
-	$(CXX) $(CFLAGS) -c Generate_Q_Table.cpp
+# Executable name
+TARGET = main
 
+# Build target
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
+
+# Compile source files
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Clean
 clean:
-	rm -f main main.o Generate_Q_Table.o
+	rm -f $(OBJS) $(TARGET)

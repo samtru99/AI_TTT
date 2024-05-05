@@ -16,9 +16,8 @@ class Gen_Q_Table
     
     public:
         void results();
-        void init_function(std::vector< std::unordered_map< std::string,  std::vector < std::pair<std::string,int>>>> Model_Data,
-                        int level_num, std::string board);
-        void find_moves(std::vector< std::unordered_map< std::string,  std::vector < std::pair<std::string,int>>>> Model_Data,
-                        int level_num, std::string board);
+        void init_function(std::vector< std::unordered_map< std::string,  std::vector < std::pair<std::string,double>>>> Model_Data);
+        void find_moves(std::vector< std::unordered_map< std::string,  std::vector < std::pair<std::string,double>>>> Model_Data,
+                        int level_num, char board[9]);
         
 };
