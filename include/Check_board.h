@@ -1,10 +1,10 @@
 #ifndef CHECK_BOARD_H
 #define CHECK_BOARD_H
-
-bool rows(char board[]);
-bool columns(char board[9]);
-bool diagonals(char board[9]);
-bool tie(char board[9]);
+#include <vector>
+bool rows( std::vector<char> board);
+bool columns( std::vector<char> board);
+bool diagonals( std::vector<char> board);
+bool tie (std::vector<char> board);
 
 
 #endif 
