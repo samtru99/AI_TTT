@@ -4,13 +4,13 @@
 #include <vector>
 #include <stdio.h>
 #include <iostream>
-#include <unordered_map>
+#include <map>
 #include <string>
 #include <algorithm>
 #include <tuple>
 
 
-void Gen_Q_Table::init_function(std::vector< std::unordered_map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data)
+void Gen_Q_Table::init_function(std::vector< std::map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data)
 {
     std::vector<char> board = {'_', '_', '_', '_', '_', '_', '_', '_', '_'};    
     for(int x_first_move = 0; x_first_move < 9; x_first_move+=1)
@@ -24,7 +24,7 @@ void Gen_Q_Table::init_function(std::vector< std::unordered_map< std::string,  s
     }
 }
 
-void Gen_Q_Table::find_moves(std::vector< std::unordered_map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data,
+void Gen_Q_Table::find_moves(std::vector< std::map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data,
                         int level_num,  std::vector<char> x_current_move)
 {
     std::string x_current_move_str(x_current_move.begin(), x_current_move.end());
@@ -71,28 +71,27 @@ void Gen_Q_Table::find_moves(std::vector< std::unordered_map< std::string,  std:
                     std::cout << "O won" << std::endl;
                     printBoard(O_next_move);
                     m_o_wins+=1;
-                    return;
                 }
-                //Find X next move;
-                // else
-                // {
-                //     for(int find_x_counter_move = 0; find_x_counter_move < 9; find_x_counter_move+=1)
-                //     {
-                //         if(O_next_move[find_x_counter_move] == '_')
-                //         {
-                //             std::vector<char> x_counter_move(O_next_move);
-                //             x_counter_move[find_x_counter_move] = 'X';
-                //             std::string x_counter_move_str(x_counter_move.begin(), x_counter_move.end());
-                //             std::cout << "x_counter_move is " << x_counter_move_str << std::endl;
+                // Find X next move;
+                else
+                {
+                    for(int find_x_counter_move = 0; find_x_counter_move < 9; find_x_counter_move+=1)
+                    {
+                        if(O_next_move[find_x_counter_move] == '_')
+                        {
+                            std::vector<char> x_counter_move(O_next_move);
+                            x_counter_move[find_x_counter_move] = 'X';
+                            std::string x_counter_move_str(x_counter_move.begin(), x_counter_move.end());
+                            std::cout << "x_counter_move is " << x_counter_move_str << std::endl;
 
-                //             //find_moves(Model_Data, level_num+1, x_counter_move); //need to return the vector of pairs
-                //         }
-                //     }
-                // }
+                            find_moves(Model_Data, level_num+1, x_counter_move); //need to return the vector of pairs
+                        }
+                    }
+                }
             }
         }
         Model_Data[level_num][x_current_move_str] = x_moves_vector;
-        std::cout << "num of moves for " << x_current_move_str << " " << Model_Data[level_num][x_current_move_str].size() << std::endl;
+        // std::cout << "num of moves for " << x_current_move_str << " " << Model_Data[level_num][x_current_move_str].size() << std::endl;
     }
 }
 
