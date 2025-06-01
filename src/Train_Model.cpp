@@ -1,7 +1,7 @@
 #include "../include/Train_Model.h"
 #include "../include/Check_board.h"
 #include <string.h>
-void Train_Model::train(int number_of_games, std::vector< std::map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data)
+void Train_Model::train(int number_of_games, Model_ai& Model_Data)
 {
     /*
         Initialize
@@ -57,21 +57,22 @@ void Train_Model::train(int number_of_games, std::vector< std::map< std::string,
         // Explore route
         if( random_number < m_epsilon)
         {
-            int number_of_options = Model_Data[x_play_count][x_current_move_str].size();
+            int number_of_options = Model_Data.get_q_vector_size(x_play_count,x_current_move_str);//Model_Data[x_play_count][x_current_move_str].size();
             int explore_value = (rand() % number_of_options);
-            std::string o_play = Model_Data[x_play_count][x_current_move_str][explore_value].first;
+            std::string o_play = Model_Data.get_o_play(x_play_count, x_current_move_str, explore_value);//[x_play_count][x_current_move_str][explore_value].first;
         }
         //Exploit route
         else
         {
             //Set up to extract highest move
             std::vector<int> highest_q_val_list;
-            int highest_q_value = Model_Data[x_play_count][x_current_move_str][0].second;
+            //int highest_q_value = Model_Data[x_play_count][x_current_move_str][0].second;
+            int highest_q_value = Model_Data.get_q_value(x_play_count,x_current_move_str,0);
             highest_q_val_list.push_back(0);
             std::string exploit_move;
             std::string o_counter_move;
             //Extract Highest Q value(s)
-            std::vector<std::pair<std::string, double>> all_possible_o_moves = Model_Data[x_play_count][x_current_move_str];
+            std::vector<std::pair<std::string, double>> all_possible_o_moves = Model_Data.get_q_vector(x_play_count, x_current_move_str);//[x_play_count][x_current_move_str];
             for(int i = 1; i < all_possible_o_moves.size(); i++)
             {
                 if(all_possible_o_moves[i].second > highest_q_value)

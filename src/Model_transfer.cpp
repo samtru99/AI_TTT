@@ -6,7 +6,7 @@
 #include <bits/stdc++.h>
 
 
-void Model_transfer::save_model(std::vector< std::map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data)
+void Model_transfer::save_model(Model_ai& Model_Data)
 {
     std::cout << "Saving Model...." << std::endl;
     std::ofstream model_file;
@@ -23,7 +23,8 @@ void Model_transfer::save_model(std::vector< std::map< std::string,  std::vector
         }
         
         //Iterate through keys
-        for (const auto& pair: Model_Data[q_table])
+        std::map< std::string,  std::vector < std::pair<std::string, double> >> q_vector = Model_Data.get_q_table(q_table);
+        for (const auto& pair: q_vector)
         {
             // Write Key
             model_file << pair.first;
@@ -53,7 +54,7 @@ void Model_transfer::save_model(std::vector< std::map< std::string,  std::vector
     std::cout << "Model saved..." << std::endl;
 }
 
-void Model_transfer::load_model(std::vector< std::map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data)
+void Model_transfer::load_model(Model_ai& Model_Data)
 {
     //Iterate through each Q File
     std::cout << "Loading Model...." << std::endl;
@@ -112,7 +113,8 @@ void Model_transfer::load_model(std::vector< std::map< std::string,  std::vector
                 }
 
             }
-            Model_Data[q_file_counter][key] = temp_vector;
+            //Model_Data[q_file_counter][key] = temp_vector;
+            Model_Data.store_q_value(q_file_counter,key,temp_vector);
         }
 
 

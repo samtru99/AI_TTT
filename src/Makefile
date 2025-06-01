@@ -2,10 +2,10 @@
 CC = g++
 
 # Compiler flags
-CFLAGS = -Wall -Wextra -std=c++11
+CFLAGS = -g -Wall -Wextra -std=c++17
 
 # Source files
-SRCS = main.cpp Generate_Q_Table.cpp Check_board.cpp
+SRCS = main.cpp Generate_Q_Table.cpp Check_board.cpp Model_transfer.cpp Train_Model.cpp Model.cpp
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)

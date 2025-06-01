@@ -9,8 +9,8 @@
 #include <algorithm>
 #include <tuple>
 
-
-void Gen_Q_Table::init_function(std::vector< std::map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data)
+//std::vector< std::map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data
+void Gen_Q_Table::init_function(Model_ai& Model_Data)
 {
     std::vector<char> board = {'_', '_', '_', '_', '_', '_', '_', '_', '_'};    
     for(int x_first_move = 0; x_first_move < 9; x_first_move+=1)
@@ -24,8 +24,8 @@ void Gen_Q_Table::init_function(std::vector< std::map< std::string,  std::vector
     }
 }
 
-void Gen_Q_Table::find_moves(std::vector< std::map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data,
-                        int level_num,  std::vector<char> x_current_move)
+//std::vector< std::map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data
+void Gen_Q_Table::find_moves(Model_ai& Model_Data, int level_num,  std::vector<char> x_current_move)
 {
     std::string x_current_move_str(x_current_move.begin(), x_current_move.end());
     // std::cout << "x_current_move is " << x_current_move_str << std::endl;
@@ -37,21 +37,21 @@ void Gen_Q_Table::find_moves(std::vector< std::map< std::string,  std::vector < 
     */
     if( rows(x_current_move) || columns(x_current_move) || diagonals(x_current_move))
     {
-        std::cout << "X Won " << std::endl;
-        printBoard(x_current_move);
+        //std::cout << "X Won " << std::endl;
+        //printBoard(x_current_move);
         m_x_wins += 1;
         return;
     }
-    else if ( tie(x_current_move))
+    else if ( tie_game(x_current_move))
     {
-        std::cout << "Tie" << std::endl;
-        printBoard(x_current_move);
+        //std::cout << "Tie" << std::endl;
+        //printBoard(x_current_move);
         m_draws += 1;
         return;
     }
     else  
     {
-        std::vector < std::pair<std::string,double>> x_moves_vector;
+        std::vector < std::pair<std::string,double>> o_moves_vector;
 
         // 1. Generate all O moves
         for(int next_available_move_for_O = 0; next_available_move_for_O < 9; next_available_move_for_O++)
@@ -63,13 +63,13 @@ void Gen_Q_Table::find_moves(std::vector< std::map< std::string,  std::vector < 
                 std::string O_next_move_str(O_next_move.begin(), O_next_move.end());
                 //std::cout << "O_next_move - " << O_next_move_str << std::endl;
                 
-                x_moves_vector.push_back(std::make_pair(O_next_move_str, 0.0));                
+                o_moves_vector.push_back(std::make_pair(O_next_move_str, 0.0));                
                 // Model_Data[level_num][x_current_move_str].push_back( std::make_pair(O_next_move_str, 0.0));
                 
                 if( rows(O_next_move) || columns(O_next_move) || diagonals(O_next_move))
                 {
-                    std::cout << "O won" << std::endl;
-                    printBoard(O_next_move);
+                    //std::cout << "O won" << std::endl;
+                    //printBoard(O_next_move);
                     m_o_wins+=1;
                 }
                 // Find X next move;
@@ -82,16 +82,15 @@ void Gen_Q_Table::find_moves(std::vector< std::map< std::string,  std::vector < 
                             std::vector<char> x_counter_move(O_next_move);
                             x_counter_move[find_x_counter_move] = 'X';
                             std::string x_counter_move_str(x_counter_move.begin(), x_counter_move.end());
-                            std::cout << "x_counter_move is " << x_counter_move_str << std::endl;
-
+                            //std::cout << "x_counter_move is " << x_counter_move_str << std::endl;
                             find_moves(Model_Data, level_num+1, x_counter_move); //need to return the vector of pairs
                         }
                     }
                 }
             }
         }
-        Model_Data[level_num][x_current_move_str] = x_moves_vector;
-        // std::cout << "num of moves for " << x_current_move_str << " " << Model_Data[level_num][x_current_move_str].size() << std::endl;
+        // Model_Data[level_num][x_current_move_str] = o_moves_vector;
+        Model_Data.store_q_value(level_num, x_current_move_str, o_moves_vector);
     }
 }
 

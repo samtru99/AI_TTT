@@ -8,31 +8,33 @@
 #include <vector>
 
 #include "../include/Generate_Q_Table.h"
+#include "../include/Model_transfer.h"
+#include "../include/Train_Model.h"
 
 // Function to print the contents of an unordered_map
-void printUnorderedMap(std::vector< std::map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data) {
+// void printUnorderedMap(Model_ai& Model_Data) 
+// {
+//     for(int i = 0; i < 1; i++)
+//     {
+//         std::cout << "Q_table_"<<i<<std::endl;
+//         int key_size = 0;
+//         int value_size = 0;
+//         for (const auto& pair : Model_Data[i]) 
+//         {
+//             key_size+=1;
+//             std::cout << "Key: " << pair.first << std::endl;
+//             std::cout << "Values:" << std::endl;
+//             for (const auto& innerPair : pair.second) {
+//                 std::cout << "    First: " << innerPair.first << ", Second: " << innerPair.second << std::endl;
+//                 value_size+=1;
+//             }
+//             std::cout << std::endl;
+//         }
+//         std::cout << "Key Size: " << key_size << std::endl;
+//         std::cout << "Value Size: " << value_size << std::endl;
 
-    // for(int i = 0; i < 1; i++)
-    // {
-        // std::cout << "Q_table_"<<i<<std::endl;
-        int key_size = 0;
-        int value_size = 0;
-        for (const auto& pair : Model_Data[3]) 
-        {
-            key_size+=1;
-            std::cout << "Key: " << pair.first << std::endl;
-            std::cout << "Values:" << std::endl;
-            for (const auto& innerPair : pair.second) {
-                std::cout << "    First: " << innerPair.first << ", Second: " << innerPair.second << std::endl;
-                value_size+=1;
-            }
-            std::cout << std::endl;
-        }
-        std::cout << "key Size is " << key_size << std::endl;
-        std::cout << "value Size is " << value_size << std::endl;
-
-    // }
-}
+//     }
+// }
 
 
 int main(int argc, char* argv[])
@@ -50,33 +52,31 @@ int main(int argc, char* argv[])
     // if (std::string(argv[1]) == "n")
     // {
         
-        std::map< std::string,  std::vector < std::pair<std::string, double> >> Q_table_template;
-
-        // std::unordered_map< std::string,  std::vector < std::pair<std::string, double> >> Q_table_1;
-        // std::unordered_map< std::string,  std::vector < std::pair<std::string, double> >> Q_table_3;
-        // std::unordered_map< std::string,  std::vector < std::pair<std::string, double> >> Q_table_5;
-        // std::unordered_map< std::string,  std::vector < std::pair<std::string, double> >> Q_table_7;
-        std::vector< std::map< std::string,  std::vector < std::pair<std::string, double> >> > Model_Q_Table;
+        // std::map< std::string,  std::vector < std::pair<std::string, double> >> Q_table_template;
+        // std::vector< std::map< std::string,  std::vector < std::pair<std::string, double> >> > Model_Q_Table;
         
-        Model_Q_Table.push_back(Q_table_template);        
-        Model_Q_Table.push_back(Q_table_template);        
-        Model_Q_Table.push_back(Q_table_template);        
-        Model_Q_Table.push_back(Q_table_template);        
+        // Model_Q_Table.push_back(Q_table_template);        
+        // Model_Q_Table.push_back(Q_table_template);        
+        // Model_Q_Table.push_back(Q_table_template);        
+        // Model_Q_Table.push_back(Q_table_template); 
+        Model_ai ai('O');  
 
         Gen_Q_Table generator;
-        //generator.init_function(Model_Q_Table);
-        std::vector<char> board = {'_', '_', '_', '_', '_', '_', '_', '_', '_'};    
-        for(int x_first_move = 0; x_first_move < 9; x_first_move+=1)
-        {
-            std::vector<char> temp(board);
-            temp[x_first_move] = 'X';
-            std::string temp_str(temp.begin(), temp.end());
-            generator.find_moves(Model_Q_Table, 0, temp);
-        }
-        std::cout << "map size is " << Model_Q_Table[0].size() << std::endl;
-        std::cout << "printing out Q Table " << std::endl;
-        generator.results();
+        generator.init_function(ai);
+       
+        std::cout << "map size is " << ai.size() << std::endl;
+        //std::cout << "printing out Q Table " << std::endl;
+        //generator.results();
         //printUnorderedMap(Model_Q_Table);
+        //ai.print_Q_table();
+        Model_transfer transfer;
+        //transfer.save_model(ai);
+        transfer.load_model(ai);
+        ai.print_Q_table();
+        //printUnorderedMap(Model_Q_Table);
+        Train_Model train;
+        train.train(1, ai); 
+
 
     // }
     return 0;

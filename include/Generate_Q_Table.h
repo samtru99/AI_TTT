@@ -2,8 +2,9 @@
 #include <vector>
 #include <stdio.h>
 #include <iostream>
-#include <unordered_map>
+#include <map>
 #include <string>
+#include "./Model.h"
 class Gen_Q_Table
 {
     private:
@@ -22,8 +23,7 @@ class Gen_Q_Table
             m_o_wins = 0;
         }
         void results();
-        void init_function(std::vector< std::unordered_map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data);
-        void find_moves(std::vector< std::unordered_map< std::string,  std::vector < std::pair<std::string,double>>>>& Model_Data,
-                        int level_num,  std::vector<char> x_current_move);
+        void init_function(Model_ai& Model_Data);
+        void find_moves(Model_ai& Model_Data, int level_num,  std::vector<char> x_current_move);
         void printBoard(std:: vector<char> board);
 };
