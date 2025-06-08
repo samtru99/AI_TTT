@@ -1,6 +1,7 @@
 #include "../include/Train_Model.h"
 #include "../include/Check_board.h"
 #include <string.h>
+#include <iostream>
 void Train_Model::train(int number_of_games, Model_ai& Model_Data)
 {
     /*
@@ -15,15 +16,18 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
     std::vector<std::vector<std::string>> episode;
       
     std::vector<char> board = {'_', '_', '_', '_', '_', '_', '_', '_', '_'};    
-    std::vector<int> choices = {1,2,3,4,5,6,7,8};
+    std::vector<int> choices = {1,2,3,4,5,6,7,8,9};
     int reward = 0;
     while( won != true && tie != true)
     {
+        std::string board_before_x(board.begin(), board.end());
+        std::cout << "X turn: board is now " << board_before_x<< std::endl;
         std::vector<std::string> next_state;
         /*
             X turn
         */
-        int random_move = (rand() % choices.size() + 1 );
+        srand(time(NULL));
+        int random_move = (rand() % choices.size());
 
         int position = choices[random_move];
 
@@ -34,12 +38,14 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
         //Check if X won or if it's a tie
         if( rows(board) || columns(board) || diagonals(board))
         {
+            std::cout << "X won" << std::endl;
             won = true;
             reward = -1;
             break;
         }
         if (tie_game(board))
         {
+            std::cout << "Tie" << std::endl;
             tie = true;
             reward = 1;
             break;
@@ -47,6 +53,7 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
 
         //find the right dictionary and x
         std::string x_current_move_str(board.begin(), board.end());
+        std::cout << "x_current " << x_current_move_str << std::endl;
         next_state.push_back(x_current_move_str);
 
         /*
@@ -55,11 +62,12 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
         double random_number = ((double) rand() / (RAND_MAX)) + 1;
         
         // Explore route
+        std::string o_counter_move;
         if( random_number < m_epsilon)
         {
             int number_of_options = Model_Data.get_q_vector_size(x_play_count,x_current_move_str);//Model_Data[x_play_count][x_current_move_str].size();
             int explore_value = (rand() % number_of_options);
-            std::string o_play = Model_Data.get_o_play(x_play_count, x_current_move_str, explore_value);//[x_play_count][x_current_move_str][explore_value].first;
+            std::string o_counter_move = Model_Data.get_o_play(x_play_count, x_current_move_str, explore_value);//[x_play_count][x_current_move_str][explore_value].first;
         }
         //Exploit route
         else
@@ -99,40 +107,51 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
             }
             o_counter_move = exploit_move;
 
-            next_state.push_back(o_counter_move);
+        }
+        next_state.push_back(o_counter_move);
 
-            //Update the board - Need to delete the choice[element]
-            for(int compare = 0; compare < 9; compare++)
+        //Update the board - Need to delete the choice[element]
+        std::cout << "O counter move " << o_counter_move << std::endl;
+        for(int compare = 0; compare < 9; compare++)
+        {
+            //Found difference
+            if(o_counter_move[compare] != x_current_move_str[compare])
             {
-                //Found difference
-                if(o_counter_move[compare] != x_current_move_str[compare])
+                //Find the elemental position
+                for(int find_choice = 0; find_choice < choices.size(); find_choice++)
                 {
-                    //Find the elemental position
-                    for(int find_choice = 0; find_choice < choices.size(); find_choice++)
+                    if(choices[find_choice] == compare + 1)
                     {
-                        if(choices[find_choice] == compare+1)
-                        {
-                            choices.erase(choices.begin() + find_choice);
-                        }
+                        std::cout << "Difference is at " << find_choice << std::endl;
+                        choices.erase(choices.begin() + find_choice);
+                        //board[find_choice] = 'O';
+                        break;
                     }
                 }
-            }
-
-            //Check if O won
-            episode.push_back(next_state);
-            if( rows(board) || columns(board) || diagonals(board))
-            {
-                won = true;
-                reward = 1;
                 break;
             }
-            
-            x_play_count+=1;
         }
 
+        for(int i = 0; i < 9; i++)
+        {
+            board[i] = o_counter_move[i];
+        }
+        std::string board_after_o(board.begin(), board.end());
+        std::cout << "board after o turn " << board_after_o<< std::endl;
+        //Check if O won
+        episode.push_back(next_state);
+        if( rows(board) || columns(board) || diagonals(board))
+        {
+            std::cout << "O won" << std::endl;
+            won = true;
+            reward = 1;
+            break;
+        }
+        
+        x_play_count+=1;
 
     }
-
+    number_of_games--;
 
 
    }
