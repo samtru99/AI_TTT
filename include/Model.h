@@ -36,4 +36,6 @@ class Model_ai
         std::string get_o_play(int x_play_count, std::string x_current_move, int move);
 
         int get_q_vector_size(int x_play_count, std::string x_current_move);
+
+        int find_sub_q_table(std::string x_move);
 };

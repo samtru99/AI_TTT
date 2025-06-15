@@ -46,7 +46,12 @@ double Model_ai::get_q_value(int x_play_count, std::string x_current_move, int m
 
 std::string Model_ai::get_o_play(int x_play_count, std::string x_current_move, int move)
 {
-    return m_Q_table[x_play_count][x_current_move][move].first;
+    try {
+        return m_Q_table[x_play_count][x_current_move][move].first;
+    }
+    catch(const std::exception& e){
+        return "Error";
+    }
 }
 
 int Model_ai::get_q_vector_size(int x_play_count, std::string x_current_move)
@@ -57,4 +62,9 @@ int Model_ai::get_q_vector_size(int x_play_count, std::string x_current_move)
 std::vector < std::pair<std::string,double>> Model_ai::get_q_vector(int x_play_count, std::string x_current_move)
 {
     return m_Q_table[x_play_count][x_current_move];
+}
+
+int Model_ai::find_sub_q_table(std::string x_move)
+{
+
 }

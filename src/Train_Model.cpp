@@ -165,3 +165,24 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
 
    }
 }
+
+/*
+    Epsiode - Stack ADT to update the values
+
+    Eq = Q(S,A) = + lr * (R(S,A) + gamma * max() - Q(S,A))
+
+    epsidoe = [x_str, o_str]
+*/
+void Train_Model::update_q_vals(Model_ai& Model_data, std::vector<std::vector<std::string>> episode)
+{
+   for(int clip = 0; clip < episode.size(); clip++)
+   {
+        //Determine which sub Q table this 'clip' resides in
+        for(int sub_table = 0; sub_table < episode.size(); sub_table++)
+        {
+            if()
+        }
+
+        double new_q_val = Model_data.get_q_value()
+   }
+}

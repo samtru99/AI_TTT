@@ -9,7 +9,7 @@ class Train_Model
         double m_epsilon;
         double m_learning_rate;
         double m_gamma;
-    
+        int m_reward;    
     public:
 
         Train_Model(double espilon, double learn_rate, double gamma)
@@ -40,4 +40,9 @@ class Train_Model
         /// @param number_of_games - Number of games to perform 
         /// @param Model_Data - Model Object
         void test_model(int number_of_games, Model_ai& Model_Data);
+
+        /// @brief Teach the model by rewarding the paths it took
+        /// @param Model_data - Model Object
+        /// @param episode - Game history
+        void update_q_vals(Model_ai& Model_data, std::vector<std::vector<std::string>> episode);
 };
