@@ -4,8 +4,8 @@
 bool rows( std::vector<char> board);
 bool columns( std::vector<char> board);
 bool diagonals( std::vector<char> board);
-bool tie (std::vector<char> board);
-
+bool tie_game (std::vector<char> board);
+void print_board(std::vector<char> board);
 
 #endif 
 

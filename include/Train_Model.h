@@ -11,6 +11,14 @@ class Train_Model
         double m_gamma;
     
     public:
+
+        Train_Model(double espilon, double learn_rate, double gamma)
+        {
+            m_epsilon = espilon;
+            m_learning_rate = learn_rate;
+            m_gamma = gamma;
+        }
+
         /// @brief Simulate numerous games to train the model 
         /// @param number_of_games - number of games to performs
         /// @param Model_Data - Model Object 

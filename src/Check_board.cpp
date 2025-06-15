@@ -1,5 +1,5 @@
 #include "../include/Check_board.h"
-
+#include <iostream>
 
 bool rows(std::vector<char> board)
 {
@@ -7,15 +7,19 @@ bool rows(std::vector<char> board)
     {
         return true;
     }
-    if( board[3] == board[4] && board[4] == board[5] && board[3] != '_')
+    else if( board[3] == board[4] && board[4] == board[5] && board[3] != '_')
     {
         return true;
     }
-    if(board[6] == board[7] && board[7] == board[8] && board[6] != '_')
+    else if(board[6] == board[7] && board[7] == board[8] && board[6] != '_')
     {
         return true;
     }
-    return false;
+    else
+    {
+        return false;
+    }
+    // return false;
 }
 
 bool columns(std::vector<char> board)
@@ -24,15 +28,18 @@ bool columns(std::vector<char> board)
     {
         return true;
     }
-    if(board[1] == board[4] && board[4] == board[7] && board[1] != '_')
+    else if(board[1] == board[4] && board[4] == board[7] && board[1] != '_')
     {
         return true;
     }
-    if(board[2] == board[5] && board[5] == board[8] && board[2] != '_')
+    else if(board[2] == board[5] && board[5] == board[8] && board[2] != '_')
     {
         return true;
     }
-    return false;
+    else 
+    {
+        return false;    
+    }
 }
 
 bool diagonals(std::vector<char> board)
@@ -41,14 +48,17 @@ bool diagonals(std::vector<char> board)
     {
         return true;
     }
-    if(board[6] == board[4] && board[4] == board[2] && board[6] != '_')
+    else if(board[6] == board[4] && board[4] == board[2] && board[6] != '_')
     {
         return true;
     }
-    return false;
+    else
+    {
+        return false;
+    }
 }
 
-bool tie(std::vector<char> board)
+bool tie_game(std::vector<char> board)
 {
     for(int i = 0; i < 9; i++)
     {
@@ -58,4 +68,13 @@ bool tie(std::vector<char> board)
         }
     }
     return true;
+}
+
+void print_board(std::vector<char> board)
+{
+    std::cout << "---------" << std::endl;
+    std::cout << "   " << board[0] << board[1] << board[2] << std::endl;
+    std::cout << "   " << board[3] << board[4] << board[5] << std::endl;
+    std::cout << "   " << board[6] << board[7] << board[8] << std::endl;
+    std::cout << "---------" << std::endl;
 }
