@@ -31,6 +31,8 @@ class Model_ai
 
         double get_q_value(int x_play_count, std::string x_current_move, int move);
 
+        double get_q_value(int x_play_count, std::string x_current_move, std::string o_move);
+
         std::vector < std::pair<std::string,double>> get_q_vector(int x_play_count, std::string x_current_move);
 
         std::string get_o_play(int x_play_count, std::string x_current_move, int move);
@@ -38,4 +40,8 @@ class Model_ai
         int get_q_vector_size(int x_play_count, std::string x_current_move);
 
         int find_sub_q_table(std::string x_move);
+
+        double find_next_max_q_value(int sub_q_table, std::string x_move);
+
+        void update_q_value(int sub_q_table, std::string x_move, std::string o_move, double q_value);
 };

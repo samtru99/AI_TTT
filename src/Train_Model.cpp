@@ -1,5 +1,6 @@
 #include "../include/Train_Model.h"
 #include "../include/Check_board.h"
+#include "../include/Model.h"
 #include <string.h>
 #include <iostream>
 void Train_Model::train(int number_of_games, Model_ai& Model_Data)
@@ -147,7 +148,8 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
         std::string board_after_o(board.begin(), board.end());
         std::cout << "board after o turn " << board_after_o<< std::endl;
         //Check if O won
-        episode.push_back(next_state);
+        // episode.insert(0,next_state);
+        episode.insert(episode.begin(), next_state);
         if( rows(board) || columns(board) || diagonals(board))
         {
             std::cout << "O won" << std::endl;
@@ -161,7 +163,7 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
 
     }
     number_of_games--;
-
+    update_q_vals(Model_Data, episode);
 
    }
 }
@@ -170,19 +172,33 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
     Epsiode - Stack ADT to update the values
 
     Eq = Q(S,A) = + lr * (R(S,A) + gamma * max() - Q(S,A))
-
-    epsidoe = [x_str, o_str]
+                
+                  1      2       3       4       5       6       7      8        9
+    epsidoe = [x_str, o_str], [x_str, o_str], [x_str, o_str], [x_str, o_str], [x_str, "temp"]
 */
 void Train_Model::update_q_vals(Model_ai& Model_data, std::vector<std::vector<std::string>> episode)
 {
+    //   for(const auto& pair : episode)
+    //   {
+    //      std::cout << pair[0] << " -- " << pair[1] << std::endl;
+    //   }
    for(int clip = 0; clip < episode.size(); clip++)
    {
         //Determine which sub Q table this 'clip' resides in
-        for(int sub_table = 0; sub_table < episode.size(); sub_table++)
-        {
-            if()
-        }
+        std::string x_play = episode[clip][0];
+        std::string o_play = episode[clip][1];
+        int current_sub_table = episode.size() - clip;
+        double current_q_value = Model_data.get_q_value(current_sub_table, x_play, o_play);
 
-        double new_q_val = Model_data.get_q_value()
+        if(clip != (episode.size() - 1))
+        {
+            int next_max_q_value = Model_data.find_next_max_q_value(current_sub_table, episode[clip+1][0]);
+            current_q_value += m_learning_rate * (m_gamma * next_max_q_value - current_q_value);
+        }
+        else
+        {
+            current_q_value += m_learning_rate * (m_reward - current_q_value);
+        }
+        Model_data.update_q_value(current_sub_table, x_play, o_play, current_q_value);
    }
 }
