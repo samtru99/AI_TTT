@@ -92,12 +92,31 @@ double Model_ai::find_next_max_q_value(int sub_q_table, std::string x_move)
 
 void Model_ai::update_q_value(int sub_q_table, std::string x_move, std::string o_move, double q_value)
 {
-    for(auto& pair : m_Q_table[sub_q_table][x_move])
+    std::cout << "Updating q value function" << std::endl;
+    auto temp = get_q_vector(sub_q_table, o_move);
+
+
+    for(int pair = 0; pair < get_q_vector_size(sub_q_table,x_move); pair++)
     {
-        if(pair.first == o_move)
+        auto p = m_Q_table[sub_q_table][x_move][pair];
+        std::cout << "pair.first - " << p.first << std::endl;
+        if(p.first == o_move)
         {
-            pair.second = q_value;
+            std::cout << "Updating " << o_move << " to be " << q_value << std::endl;
+            m_Q_table[sub_q_table][x_move][pair].second = p.second;
             return;
         }
     }
+
+    // for(auto& pair : m_Q_table[sub_q_table][x_move])
+    // {
+    //     std::cout << "pair.first - " << pair.first << std::endl;
+    //     if(pair.first == o_move)
+    //     {
+    //         std::cout << "Updating " << o_move << " to be " << q_value << std::endl;
+    //         pair.second = q_value;
+            
+    //         return;
+    //     }
+    // }
 }

@@ -58,7 +58,7 @@ void Model_transfer::load_model(Model_ai& Model_Data)
 {
     //Iterate through each Q File
     std::cout << "Loading Model...." << std::endl;
-    for(int q_file_counter = 0; q_file_counter < 1 ; q_file_counter++) //m_Q_table_lists.size() 
+    for(int q_file_counter = 0; q_file_counter < Model_Data.size() ; q_file_counter++) //m_Q_table_lists.size() 
     {
         // Set up the Model
         std::vector < std::pair<std::string,double>> temp_vector;
