@@ -61,8 +61,8 @@ int main(int argc, char* argv[])
         // Model_Q_Table.push_back(Q_table_template); 
         Model_ai ai('O');  
 
-        //Gen_Q_Table generator;
-        //generator.init_function(ai);
+        // Gen_Q_Table generator;
+        // generator.init_function(ai);
        
         std::cout << "map size is " << ai.size() << std::endl;
         //std::cout << "printing out Q Table " << std::endl;
@@ -75,8 +75,8 @@ int main(int argc, char* argv[])
         //ai.print_Q_table();
         //printUnorderedMap(Model_Q_Table);
         std::cout << "Training Model " << std::endl;
-        Train_Model train(.5, 1,1);
-        train.train(1, ai); 
+        Train_Model train(.5, .9,.95);
+        train.train(100, ai); 
         std::cout << "saving model" << std::endl;
         transfer.save_model(ai);
 

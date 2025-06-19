@@ -26,28 +26,34 @@ void Model_transfer::save_model(Model_ai& Model_Data)
         std::map< std::string,  std::vector < std::pair<std::string, double> >> q_vector = Model_Data.get_q_table(q_table);
         for (const auto& pair: q_vector)
         {
-            // Write Key
-            model_file << pair.first;
-            model_file << ":";
-
-            //Iterate through [move, q_value] vector
-            int first_iteration = 0;
-            for(const auto& q_pair: pair.second)
+            if(pair.second.size() == 0)
             {
-                if(first_iteration != 0)
-                {
-                    model_file << " ";
-                }
-                model_file << q_pair.first;
-                model_file << " ";
-                model_file << q_pair.second;
-                
-                if(q_pair != pair.second.back())
-                {
-                    model_file << " | ";
-                }
+                std::cout << pair.first << "is bad data " << std::endl;
             }
-            model_file << "\n";
+            else
+            {
+                // Write Key
+                model_file << pair.first;
+                model_file << ":";
+                //Iterate through [move, q_value] vector
+                int first_iteration = 0;
+                for(const auto& q_pair: pair.second)
+                {
+                    if(first_iteration != 0)
+                    {
+                        model_file << " ";
+                    }
+                    model_file << q_pair.first;
+                    model_file << " ";
+                    model_file << q_pair.second;
+                    
+                    if(q_pair != pair.second.back())
+                    {
+                        model_file << " | ";
+                    }
+                }
+                model_file << "\n";
+            }
         }
         model_file.close();
     }
