@@ -9,7 +9,7 @@ class Train_Model
         double m_epsilon;
         double m_learning_rate;
         double m_gamma;
-        int m_reward;    
+        double m_reward;    
     public:
 
         Train_Model(double espilon, double learn_rate, double gamma)
@@ -17,6 +17,7 @@ class Train_Model
             m_epsilon = espilon;
             m_learning_rate = learn_rate;
             m_gamma = gamma;
+            m_reward = 0;
         }
 
         /// @brief Simulate numerous games to train the model 

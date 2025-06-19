@@ -43,7 +43,7 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
             std::cout << "X won" << std::endl;
             print_board(board);
             won = true;
-            reward = -1;
+            m_reward = -1;
             break;
         }
         if (tie_game(board))
@@ -51,7 +51,7 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
             std::cout << "Tie" << std::endl;
             print_board(board);
             tie = true;
-            reward = 1;
+            m_reward = 0.25;
             break;
         }
 
@@ -155,7 +155,7 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
             std::cout << "O won" << std::endl;
             print_board(board);
             won = true;
-            reward = 1;
+            m_reward = 1;
             break;
         }
         
@@ -183,24 +183,26 @@ void Train_Model::update_q_vals(Model_ai& Model_data, std::vector<std::vector<st
     {
         std::cout << pair[0] << " -- " << pair[1] << std::endl;
     }
-    for(int clip = 0; clip < episode.size(); clip++)
+    for(int clip = 0; clip < episode.size() - 1; clip++)
     {
         //Determine which sub Q table this 'clip' resides in
         std::string x_play = episode[clip][0];
         std::string o_play = episode[clip][1];
         int current_sub_table = episode.size() - clip;
         double current_q_value = Model_data.get_q_value(current_sub_table - 1, x_play, o_play);
-
-        if(clip != (episode.size() - 1))
+        double new_current_q_value = current_q_value;
+        //Non Terminal States
+        if(clip != 0)
         {
-            int next_max_q_value = Model_data.find_next_max_q_value(current_sub_table -1 , episode[clip+1][0]);
-            current_q_value += m_learning_rate * (m_gamma * next_max_q_value - current_q_value);
+            double next_max_q_value = Model_data.find_next_max_q_value(current_sub_table -1 , episode[clip+1][0]);
+            new_current_q_value += m_learning_rate * (m_gamma * next_max_q_value - current_q_value);
         }
+        //Terminal states
         else
         {
-            current_q_value += m_learning_rate * (m_reward - current_q_value);
+            new_current_q_value += m_learning_rate * (m_reward - current_q_value);
         }
         std::cout << "before update " << std::endl;
-        Model_data.update_q_value(current_sub_table -1 , x_play, o_play, current_q_value);
+        Model_data.update_q_value(current_sub_table -1 , x_play, o_play, new_current_q_value);
     }
 }

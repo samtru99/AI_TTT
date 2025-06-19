@@ -103,7 +103,7 @@ void Model_ai::update_q_value(int sub_q_table, std::string x_move, std::string o
         if(p.first == o_move)
         {
             std::cout << "Updating " << o_move << " to be " << q_value << std::endl;
-            m_Q_table[sub_q_table][x_move][pair].second = p.second;
+            m_Q_table[sub_q_table][x_move][pair].second = q_value;
             return;
         }
     }
