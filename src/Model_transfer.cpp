@@ -1,6 +1,7 @@
 #include "../include/Model_transfer.h"
 #include <algorithm>
 #include <fstream>
+#include <iomanip>
 #include <stdio.h>
 #include <string>
 #include <bits/stdc++.h>
@@ -28,7 +29,7 @@ void Model_transfer::save_model(Model_ai& Model_Data)
         {
             if(pair.second.size() == 0)
             {
-                std::cout << pair.first << "is bad data " << std::endl;
+                //std::cout << pair.first << "is bad data " << std::endl;
             }
             else
             {
@@ -45,7 +46,7 @@ void Model_transfer::save_model(Model_ai& Model_Data)
                     }
                     model_file << q_pair.first;
                     model_file << " ";
-                    model_file << q_pair.second;
+                    model_file << std::setprecision(4) << q_pair.second;
                     
                     if(q_pair != pair.second.back())
                     {

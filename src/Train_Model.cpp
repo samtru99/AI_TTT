@@ -43,7 +43,7 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
             std::cout << "X won" << std::endl;
             print_board(board);
             won = true;
-            m_reward = -1;
+            m_reward = -10;
             break;
         }
         if (tie_game(board))
@@ -51,7 +51,7 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
             std::cout << "Tie" << std::endl;
             print_board(board);
             tie = true;
-            m_reward = 0.25;
+            m_reward = 15;
             break;
         }
 
@@ -149,13 +149,14 @@ void Train_Model::train(int number_of_games, Model_ai& Model_Data)
         std::cout << "board after o turn " << board_after_o<< std::endl;
         //Check if O won
         // episode.insert(0,next_state);
-        episode.insert(episode.begin(), next_state);
+        //episode.insert(episode.begin(), next_state);
+        episode.push_back(next_state);
         if( rows(board) || columns(board) || diagonals(board))
         {
             std::cout << "O won" << std::endl;
             print_board(board);
             won = true;
-            m_reward = 1;
+            m_reward = 25;
             break;
         }
         
@@ -183,26 +184,34 @@ void Train_Model::update_q_vals(Model_ai& Model_data, std::vector<std::vector<st
     {
         std::cout << pair[0] << " -- " << pair[1] << std::endl;
     }
-    for(int clip = 0; clip < episode.size() - 1; clip++)
+    for(int clip = episode.size() - 1; clip >= 0; clip--)
     {
         //Determine which sub Q table this 'clip' resides in
         std::string x_play = episode[clip][0];
         std::string o_play = episode[clip][1];
-        int current_sub_table = episode.size() - clip;
-        double current_q_value = Model_data.get_q_value(current_sub_table - 1, x_play, o_play);
+        std::cout << "x play " << x_play << std::endl;
+        std::cout << "o play " << o_play << std::endl;
+
+        //int current_sub_table = episode.size() - clip;
+        // int current_sub_table = clip;
+        std::cout << "current_sub_table " << clip << std::endl;
+        double current_q_value = Model_data.get_q_value(clip, x_play, o_play);
+        std::cout << "current_q_value = " << current_q_value << std::endl;
         double new_current_q_value = current_q_value;
         //Non Terminal States
-        if(clip != 0)
+        if(clip != episode.size() - 1)
         {
-            double next_max_q_value = Model_data.find_next_max_q_value(current_sub_table -1 , episode[clip+1][0]);
+            double next_max_q_value = Model_data.find_next_max_q_value(clip + 1, episode[clip+1][0]);
             new_current_q_value += m_learning_rate * (m_gamma * next_max_q_value - current_q_value);
         }
         //Terminal states
         else
         {
+            std::cout << "terminal State" << std::endl;
             new_current_q_value += m_learning_rate * (m_reward - current_q_value);
         }
+        std::cout << "new current q value " << new_current_q_value << std::endl;
         std::cout << "before update " << std::endl;
-        Model_data.update_q_value(current_sub_table -1 , x_play, o_play, new_current_q_value);
+        Model_data.update_q_value(clip, x_play, o_play, new_current_q_value);
     }
 }
